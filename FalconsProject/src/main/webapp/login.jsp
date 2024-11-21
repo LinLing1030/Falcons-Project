@@ -15,6 +15,7 @@
 <body>
 
 <input type="hidden" id="status" value="<%= request.getAttribute("status") %>">
+<input type="hidden" id="loginAttempts" value="<%= session.getAttribute("loginAttempts") != null ? session.getAttribute("loginAttempts") : 0 %>">
 
 <div class="main">
     <!-- Sign in Form -->
@@ -43,7 +44,6 @@
                             <input type="submit" name="signin" id="signin" class="form-submit" value="Log In" />
                         </div>
                     </form>
-                   
                 </div>
             </div>
         </div>
@@ -54,13 +54,50 @@
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="js/main.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<link rel="stylesheet" href="alert/dist/sweetalert.css">
 
 <script type="text/javascript">
     var status = document.getElementById("status").value;
-    if (status == "failed") {
-        swal("Sorry", "Wrong Email or Password", "error"); 
+    var loginAttempts = parseInt(document.getElementById("loginAttempts").value);
+    const lockDuration = 5;  // 锁定时间5秒
+    const flag = 0;
+
+    if (status == "failed" && loginAttempts < 3 && flag == 0) {
+        // 登录失败但未达到3次，显示失败提示
+        swal("Sorry", `Wrong Email or Password. Attempt ${loginAttempts} of 3`, "error");
+    } else if (status == "locked" && loginAttempts >= 3 && flag == 0) {
+        // 登录失败达到3次，显示锁定提示框和倒计时
+        swal({
+            title: "Account Locked!",
+            text: `Too many failed attempts. Please wait ${lockDuration} seconds...`,
+            icon: "warning",
+            button: false,
+            closeOnClickOutside: false
+        });
+
+        document.getElementById("signin").disabled = true;  // 锁定登录按钮
+        let timeLeft = lockDuration;
+
+        // 启动倒计时
+        
+        const interval = setInterval(() => {
+            swal({
+                title: "Account Locked!",
+                text: "Please wait " + timeLeft + " seconds...",
+                icon: "warning",
+                button: false,
+                closeOnClickOutside: false
+            });
+
+            timeLeft--;
+
+            if (timeLeft <= 0) {  
+                clearInterval(interval);  // 停止倒计时
+                swal.close();  // 关闭弹窗
+            }
+        }, 1000);
+        
     }
+
 </script>
 
 </body>

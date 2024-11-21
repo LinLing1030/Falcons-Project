@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Freelancer - Start Bootstrap Theme</title>
+    <title>Falcons</title>
     <style>
       /* 样式在此设置 */
       body {
@@ -141,7 +141,7 @@
       <h2 class="title" id="games">List of Games</h2>
       <div class="games">
         <div class="game-list">
-          <a href="monster-game.html"> <!-- 链接到游戏页面 -->
+          <a href="http://localhost:8082/QuizLogin/GameTrueFalse.jsp"> <!-- 链接到游戏页面 -->
             <img
               src="https://spaces.w3schools.com/images/monster.svg"
               alt="monster"
